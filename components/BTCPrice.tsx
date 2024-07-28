@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from 'react';
-import { fetchBTCPrice } from '../services/api';
+import { fetchBTCPrice } from '../services/BTCPrice';
 
 const BTCPrice = () => {
   const [price, setPrice] = useState<number | null>(null);

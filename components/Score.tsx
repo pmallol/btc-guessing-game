@@ -19,7 +19,6 @@ const Score: React.FC<ScoreProps> = ({ userId }) => {
         const data = await response.json();
         setScore(data.score);
       } catch (error) {
-        console.error('Error fetching score:', error);
       } finally {
         setLoading(false);
       }

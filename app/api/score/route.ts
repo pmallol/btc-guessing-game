@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocument, GetCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
 
 // Initialize DynamoDB Document Client
@@ -33,11 +33,32 @@ const getUserScore = async (userId: string, res: NextApiResponse<Data>) => {
   };
 
   try {
-    const result = await dynamoDB.get(params);
-    const score = result.Item?.score || 0;
+    const result = await dynamoDB.send(new GetCommand(params));
+    const score = result.Item?.score;
+    if (!result.Item?.userId) {
+      setUserScore(userId, Date.now(), 0, res);
+    }
     return Response.json({ score }, {status:200});
   } catch (error) {
-    console.error(error);
-    return Response.json({ message: 'Error fetching score' }, { status: 500 });
+    return Response.json({ message: `Error fetching score: ${error}` }, { status: 500 });
+  }
+};
+
+const setUserScore = async (userId: string, timestamp: number, score: number, res: NextApiResponse<Data>) => {
+  const updateParams = {
+    TableName: 'BTC-guessing-game-scores',
+    Key: { userId },
+    UpdateExpression: 'SET score = if_not_exists(score, :start)',
+    ExpressionAttributeValues: {
+      ':start': 0,
+    },
+  };
+
+  try {
+    const updated = await dynamoDB.send(new UpdateCommand(updateParams));
+    const newScore = updated.Attributes?.score || 0;
+    return Response.json({ score: newScore }, { status: 200 })
+  } catch (error) {
+    return Response.json({ message: `Error updating score: ${error}` }, { status: 500 });
   }
 };

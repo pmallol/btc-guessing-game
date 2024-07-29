@@ -1,18 +1,14 @@
 "use client"
 import { useState, useEffect } from 'react';
+import { useCookies } from 'next-client-cookies';
 import { fetchBTCPrice } from '../services/BTCPrice';
 
 import Score from "@/components/Score";
 import GuessButtons from "@/components/GuessButtons";
 
-function getUserId() {
-  const cookies = document.cookie;
-  const userId = cookies?.split('; ').find(cookie => cookie.startsWith('userId='));
-  return userId ? userId.split('=')[1] : ''
-}
-
 export default function Home() {
-  const userId = getUserId();
+    const cookies = useCookies();
+    const userId = cookies.get('userId') || null;
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

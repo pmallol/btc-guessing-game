@@ -71,16 +71,19 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex flex flex-col gap-y-8">
+    <main className="flex flex-col items-center justify-between p-24">
+      <div className="z-10 w-full max-w-5xl justify-between font-mono text-sm lg:flex flex flex-col gap-y-8">
         <h1 className='text-xl'>Can you guess the price of Bitcoin after <i>one minute?</i></h1>
-        <div className='h-28 mt-8'>
+        <Score userId={userId || ""} updatedScore={userScore ?? undefined} />
+        <div className='h-28 mt-8 flex flex-col items-center text-lg'>
           {btcPrice && <div>Current BTC Price: <b>${btcPrice}</b></div>}
           {btcPricePrev && <div className='mt-4 text-gray-600'>Previous BTC Price: <b>${btcPricePrev}</b></div>}
           {loading && <LoadingBar duration={timeout} />}
         </div>
-        <GuessButtons onGuess={handleGuess} loading={loading} />
-        <Score userId={userId || ""} updatedScore={userScore ?? undefined} />
+        <div className='flex flex-col items-center mt-6'>
+          <h3>Will the price go...?</h3>
+          <GuessButtons onGuess={handleGuess} loading={loading} />
+        </div>
       </div>
     </main>
   );

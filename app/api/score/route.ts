@@ -6,10 +6,10 @@ import { ReturnValue } from '@aws-sdk/client-dynamodb';
 
 // Initialize DynamoDB Document Client
 const dynamoDB = DynamoDBDocument.from(new DynamoDB({
-  region: 'eu-central-1',
+  region: process.env.N_AWS_REGION,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+    accessKeyId: process.env.N_AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.N_AWS_SECRET_ACCESS_KEY!,
   },
 }));
 

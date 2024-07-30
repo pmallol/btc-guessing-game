@@ -73,13 +73,13 @@ export default function Home() {
   };
 
   return (
-    <main className="flex flex-col items-center justify-between p-24">
+    <main className="flex flex-col items-center justify-between p-16">
       <div className="z-10 w-full max-w-5xl justify-between font-mono text-sm lg:flex flex flex-col gap-y-8">
         <h1 className='text-xl'>Can you guess the price of Bitcoin after <i>one minute?</i></h1>
 
         <Score userId={userId || ""} updatedScore={userScore ?? undefined} />
 
-        <div className='flex flex-col items-center text-lg container bg-orange-200 p-12 drop-shadow-md rounded-lg'>
+        <div className='flex flex-col items-center text-lg container bg-orange-100 p-12 drop-shadow-md rounded-lg'>
           {btcPrice && <div>Current BTC Price: <b>${btcPrice}</b></div>}
           {btcPricePrev && <div className='mt-4 text-gray-600'>Previous BTC Price: <b>${btcPricePrev}</b></div>}
           {loading && <LoadingBar duration={timeout} />}

@@ -16,6 +16,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [btcPrice, setBtcPrice] = useState<number | null>(null);
   const [userScore, setUserScore] = useState<number | null>(null);
+  const [userGuess, setUserGuess] = useState<boolean | null>(null);
   const [btcPricePrev, setBtcPricePrev] = useState<number | null>(null);
 
   useEffect(() => {
@@ -60,6 +61,7 @@ export default function Home() {
 
       const data = await response.json();
       setUserScore(data.score);
+      setUserGuess(result);
       setBtcPricePrev(btcPrice);
       setBtcPrice(newPrice);
     } catch (error) {
@@ -74,12 +76,26 @@ export default function Home() {
     <main className="flex flex-col items-center justify-between p-24">
       <div className="z-10 w-full max-w-5xl justify-between font-mono text-sm lg:flex flex flex-col gap-y-8">
         <h1 className='text-xl'>Can you guess the price of Bitcoin after <i>one minute?</i></h1>
+
         <Score userId={userId || ""} updatedScore={userScore ?? undefined} />
-        <div className='h-28 mt-8 flex flex-col items-center text-lg'>
+
+        <div className='flex flex-col items-center text-lg container bg-orange-200 p-12 drop-shadow-md rounded-lg'>
           {btcPrice && <div>Current BTC Price: <b>${btcPrice}</b></div>}
           {btcPricePrev && <div className='mt-4 text-gray-600'>Previous BTC Price: <b>${btcPricePrev}</b></div>}
           {loading && <LoadingBar duration={timeout} />}
+          {error && <div className='text-orange-500'>{error}</div>}
+
+          {!loading && !error && userScore !== null && (
+            <div className='mt-8'>
+              {userGuess ? (
+                <div className='text-sm'>🎉 YAY! You guessed right, the price went {btcPrice && btcPricePrev ? (btcPrice > btcPricePrev ? 'up' : 'down') : ''}.</div>
+              ) : (
+                <div className='text-sm'>🫠 Oops! You didn&apos;t guess this time. Try again!</div>
+              )}
+            </div>
+          )}
         </div>
+
         <div className='flex flex-col items-center mt-6'>
           <h3>Will the price go...?</h3>
           <GuessButtons onGuess={handleGuess} loading={loading} />

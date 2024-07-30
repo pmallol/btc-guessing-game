@@ -27,7 +27,7 @@ const LoadingBar: React.FC<LoadingProps> = ({ duration }) => {
   }, [duration]);
 
   return (
-    <div className="w-1/3 h-4 bg-gray-100 rounded mt-4">
+    <div className="w-1/3 h-4 bg-gray-100 rounded mt-8">
       <div
         className="h-full bg-orange-400 transition-all duration-1000"
         style={{ width: `${progress}%` }}

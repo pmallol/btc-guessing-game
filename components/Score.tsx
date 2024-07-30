@@ -29,7 +29,7 @@ const Score: React.FC<ScoreProps> = ({ userId, updatedScore }) => {
   }, [userId]);
 
   if (loading) {
-    return <div>Loading your score...</div>;
+    return <div className="text-xl p-4">Loading your score...</div>;
   }
 
   return <div className="text-xl bg-orange-100 p-4 px-6 w-fit rounded-lg drop-shadow-md">Your Score: <b>{updatedScore ? updatedScore : score}</b></div>;

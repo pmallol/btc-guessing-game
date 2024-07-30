@@ -16,6 +16,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [btcPrice, setBtcPrice] = useState<number | null>(null);
   const [userScore, setUserScore] = useState<number | null>(null);
+  const [btcPricePrev, setBtcPricePrev] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchInitialPrice = async () => {
@@ -59,6 +60,8 @@ export default function Home() {
 
       const data = await response.json();
       setUserScore(data.score);
+      setBtcPricePrev(btcPrice);
+      setBtcPrice(newPrice);
     } catch (error) {
       setError('Error occurred while processing your guess');
       console.error('Error:', error);
@@ -73,7 +76,10 @@ export default function Home() {
         <h1 className='text-xl'>Can you guess the price of Bitcoin after <i>one minute?</i></h1>
         <div className='h-28 mt-8'>
           {btcPrice && <div>Current BTC Price: <b>${btcPrice}</b></div>}
+          {btcPricePrev && <div className='mt-4 text-gray-600'>Previous BTC Price: <b>${btcPricePrev}</b></div>}
+          {loading && <LoadingBar duration={timeout} />}
         </div>
+        <GuessButtons onGuess={handleGuess} loading={loading} />
         <Score userId={userId || ""} updatedScore={userScore ?? undefined} />
       </div>
     </main>

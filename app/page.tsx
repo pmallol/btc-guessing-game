@@ -70,9 +70,10 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex flex flex-col gap-y-8">
-        {btcPrice && <div>Current BTC Price: ${btcPrice}</div>}
-        {loading && <LoadingBar duration={timeout} />}
-        <Score userId={userId || ""} updatedScore={userScore ?? undefined}/>
+        <h1 className='text-xl'>Can you guess the price of Bitcoin after <i>one minute?</i></h1>
+        <div className='h-28 mt-8'>
+          {btcPrice && <div>Current BTC Price: <b>${btcPrice}</b></div>}
+        </div>
       </div>
     </main>
   );

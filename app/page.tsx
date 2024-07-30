@@ -73,32 +73,33 @@ export default function Home() {
   };
 
   return (
-    <main className="flex flex-col items-center justify-between p-16">
-      <div className="z-10 w-full max-w-5xl justify-between font-mono text-sm lg:flex flex flex-col gap-y-8">
+    <main className="flex flex-col items-center justify-between md:p-16 md:pt-6 p-4">
+      <div className="z-10 w-full max-w-2xl justify-between font-mono text-sm lg:flex flex flex-col gap-y-8">
         <h1 className='text-xl'>Can you guess the price of Bitcoin after <i>one minute?</i></h1>
 
         <Score userId={userId || ""} updatedScore={userScore ?? undefined} />
 
-        <div className='flex flex-col items-center text-lg container bg-orange-100 p-12 drop-shadow-md rounded-lg'>
-          {btcPrice && <div>Current BTC Price: <b>${btcPrice}</b></div>}
-          {btcPricePrev && <div className='mt-4 text-gray-600'>Previous BTC Price: <b>${btcPricePrev}</b></div>}
-          {loading && <LoadingBar duration={timeout} />}
-          {error && <div className='text-orange-500'>{error}</div>}
+        <div className='flex flex-col items-center self-center text-lg container bg-orange-100 w-full h-64 p-12 py-20 drop-shadow-md rounded-lg'>
+          {!btcPrice && <div data-testid="btc-price-loading">Loading BTC Price...</div>}
+          {btcPrice && <div data-testid="btc-price">Current BTC Price: <b>${btcPrice}</b></div>}
+          {btcPricePrev && <div data-testid="btc-price-prev" className='mt-4 text-gray-600'>Previous BTC Price: <b>${btcPricePrev}</b></div>}
 
-          {!loading && !error && userScore !== null && (
+          {!error && userScore !== null && (
             <div className='mt-8'>
               {userGuess ? (
-                <div className='text-sm'>🎉 YAY! You guessed right, the price went {btcPrice && btcPricePrev ? (btcPrice > btcPricePrev ? 'up' : 'down') : ''}.</div>
+                <div className='text-sm'>✅ YAY! You guessed right, the price went {btcPrice && btcPricePrev ? (btcPrice > btcPricePrev ? 'up' : 'down') : ''}.</div>
               ) : (
-                <div className='text-sm'>🫠 Oops! You didn&apos;t guess this time. Try again!</div>
+                <div className='text-sm'>❌ Oops! You didn&apos;t guess this time. Try again!</div>
               )}
             </div>
           )}
+          {error && <div className='text-orange-500 mt-8'>{error}</div>}
         </div>
 
         <div className='flex flex-col items-center mt-6'>
           <h3>Will the price go...?</h3>
           <GuessButtons onGuess={handleGuess} loading={loading} />
+          {loading && <LoadingBar duration={timeout} />}
         </div>
       </div>
     </main>

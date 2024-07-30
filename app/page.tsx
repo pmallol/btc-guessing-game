@@ -8,8 +8,9 @@ import LoadingBar from '@/components/LoadingBar';
 import GuessButtons from "@/components/GuessButtons";
 
 export default function Home() {
-    const cookies = useCookies();
-    const userId = cookies.get('userId') || null;
+  const cookies = useCookies();
+  const userId = cookies.get('userId') || null;
+  const timeout = 10000;
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -35,8 +36,7 @@ export default function Home() {
 
     try {
       // Wait for 60 seconds
-      // await new Promise(resolve => setTimeout(resolve, 60000));
-      await new Promise(resolve => setTimeout(resolve, 10000));
+      await new Promise(resolve => setTimeout(resolve, timeout));
 
       const newPrice = await fetchBTCPrice();
 
@@ -71,9 +71,8 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex flex flex-col gap-y-8">
         {btcPrice && <div>Current BTC Price: ${btcPrice}</div>}
-        <GuessButtons onGuess={handleGuess} loading={loading}/>
-        {loading && <LoadingBar />}
-        <Score userId={userId || ""}/>
+        {loading && <LoadingBar duration={timeout} />}
+        <Score userId={userId || ""} updatedScore={userScore ?? undefined}/>
       </div>
     </main>
   );

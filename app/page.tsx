@@ -34,19 +34,9 @@ export default function Home() {
     fetchInitialPrice();
   }, []);
 
-  useEffect(() => {
-    const hideMessageTimeout = setTimeout(() => {
-      setHideMessage(true);
-    }, 10000);
-
-    return () => {
-      clearTimeout(hideMessageTimeout);
-    };
-  }, [userGuess]);
-
   const handleGuess = async (guess: 'up' | 'down') => {
     setError(null);
-    setHideMessage(false);
+    // setHideMessage(false);
 
     try {
       const newPrice = await fetchBTCPrice();
@@ -74,6 +64,11 @@ export default function Home() {
       setBtcPricePrev(btcPrice);
       setBtcPrice(newPrice);
       setLoading(true);
+      setHideMessage(false);
+      setTimeout(() => {
+        setHideMessage(true);
+      }, 10000);
+
       await new Promise(resolve => setTimeout(resolve, timeout));
     } catch (error) {
       setError('Error occurred while processing your guess');

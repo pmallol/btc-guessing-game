@@ -1,13 +1,15 @@
+import { useEffect, useState } from 'react';
+
 interface BTCPriceGuessProps {
   btcPrice: number | null;
   btcPricePrev: number | null;
   error: string | null;
   userScore: number | null;
   userGuess: boolean | null;
-  hideMessage?: boolean;
+  hideMessage: boolean;
 }
 
-const BTCPriceGuess: React.FC<BTCPriceGuessProps> = ({btcPrice, btcPricePrev, error, userScore, userGuess, hideMessage}) => {
+const BTCPriceGuess: React.FC<BTCPriceGuessProps> = ({ btcPrice, btcPricePrev, error, userScore, userGuess, hideMessage }) => {
   return (
     <div className='flex flex-col items-center self-center text-lg container bg-orange-100 w-full h-64 p-12 py-20 drop-shadow-md rounded-lg'>
       {!btcPrice && <div data-testid="btc-price-loading">Loading BTC Price...</div>}

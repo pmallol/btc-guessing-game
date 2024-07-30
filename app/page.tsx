@@ -10,7 +10,7 @@ import GuessButtons from "@/components/GuessButtons";
 export default function Home() {
   const cookies = useCookies();
   const userId = cookies.get('userId') || null;
-  const timeout = 10000;
+  const timeout = 60000;
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

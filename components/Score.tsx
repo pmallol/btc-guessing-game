@@ -3,9 +3,10 @@ import { useState, useEffect } from 'react';
 
 interface ScoreProps {
   userId: string;
+  updatedScore?: number;
 }
 
-const Score: React.FC<ScoreProps> = ({ userId }) => {
+const Score: React.FC<ScoreProps> = ({ userId, updatedScore }) => {
   const [score, setScore] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -28,10 +29,10 @@ const Score: React.FC<ScoreProps> = ({ userId }) => {
   }, [userId]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading your score...</div>;
   }
 
-  return <div className="text-center text-2xl font-bold">Score: {score}</div>;
+  return <div className="text-center text-2xl font-bold">Your Score: {updatedScore ? updatedScore : score}</div>;
 };
 
 export default Score;

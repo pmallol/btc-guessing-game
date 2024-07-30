@@ -74,6 +74,7 @@ export default function Home() {
         <div className='h-28 mt-8'>
           {btcPrice && <div>Current BTC Price: <b>${btcPrice}</b></div>}
         </div>
+        <Score userId={userId || ""} updatedScore={userScore ?? undefined} />
       </div>
     </main>
   );

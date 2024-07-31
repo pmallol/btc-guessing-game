@@ -36,8 +36,9 @@ export default function Home() {
 
   const handleGuess = async (guess: 'up' | 'down') => {
     setError(null);
-
+    setLoading(true);
     try {
+      await new Promise(resolve => setTimeout(resolve, timeout));
       const newPrice = await fetchBTCPrice();
 
       const result = guess === 'up' ? (btcPrice !== null && newPrice > btcPrice) : (btcPrice !== null && newPrice < btcPrice);
@@ -67,8 +68,6 @@ export default function Home() {
       setTimeout(() => {
         setHideMessage(true);
       }, 10000);
-
-      await new Promise(resolve => setTimeout(resolve, timeout));
     } catch (error) {
       setError('Error occurred while processing your guess');
     } finally {

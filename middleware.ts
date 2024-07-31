@@ -9,10 +9,13 @@ export function middleware(req: NextRequest) {
   // Check if the userId cookie exists
   if (!userId) {
     const userId = uuidv4();
-    return new Response(null, {
-      status: 200,
-      headers: { 'Set-Cookie': `userId=${userId}` },
+    const response = NextResponse.next()
+    response.cookies.set({
+      name: 'userId',
+      value: userId,
+      path: '/',
     })
+    return response
   }
 }
 

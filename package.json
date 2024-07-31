@@ -10,7 +10,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.620.0",
+    "@aws-sdk/client-dynamodb": "^3.621.0",
     "@aws-sdk/lib-dynamodb": "^3.620.0",
     "@vitejs/plugin-react": "^4.3.1",
     "next": "14.2.5",
@@ -28,6 +28,8 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/uuid": "^10.0.0",
+    "aws-sdk-client-mock": "^4.0.1",
+    "aws-sdk-client-mock-vitest": "^4.0.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "jsdom": "^24.1.1",

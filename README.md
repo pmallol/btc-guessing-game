@@ -8,6 +8,19 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 A web app where users guess if the BTC/USD price will go up or down after one minute.
 
+## Features
+
+This repository includes the following features:
+
+1. Real-time BTC/USD price updates: The app fetches the latest BTC/USD price from an API and displays it to the users.
+
+2. Guessing game: Users can make predictions on whether the BTC/USD price will go up or down after one minute.
+
+3. Persistence: The app stores user data, including scores and game history, using AWS DynamoDB.
+
+4. Responsive design: The app is built with TailwindCSS and is optimized for different screen sizes.
+
+
 ## Technologies Used
 
 - Next.js

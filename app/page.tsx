@@ -36,7 +36,6 @@ export default function Home() {
 
   const handleGuess = async (guess: 'up' | 'down') => {
     setError(null);
-    // setHideMessage(false);
 
     try {
       const newPrice = await fetchBTCPrice();

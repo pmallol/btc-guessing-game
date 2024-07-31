@@ -20,6 +20,10 @@ This repository includes the following features:
 
 4. Responsive design: The app is built with TailwindCSS and is optimized for different screen sizes.
 
+5. Clear information: Users can verify if the price when up, down or if it stayed the same, as well as for how much.
+
+6. Testing: Both the UI and the api functionality are covered with tests.
+
 
 ## Technologies Used
 
@@ -27,6 +31,7 @@ This repository includes the following features:
 - TypeScript
 - TailwindCSS
 - AWS (DynamoDB, Lambda)
+- Vitest
 
 ## Getting Started
 

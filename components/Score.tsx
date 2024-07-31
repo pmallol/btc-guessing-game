@@ -32,7 +32,7 @@ const Score: React.FC<ScoreProps> = ({ userId, updatedScore }) => {
     return <div className="text-xl p-4">Loading your score...</div>;
   }
 
-  return <div data-testid="score" className="text-xl bg-orange-100 p-4 px-6 w-fit rounded-lg drop-shadow-md">Your Score: <b>{updatedScore ? updatedScore : score}</b></div>;
+  return <div data-testid="score" className="text-xl border border-orange-300 p-4 px-6 w-fit rounded-lg">Your Score: <b>{updatedScore ? updatedScore : score}</b></div>;
 };
 
 export default Score;

@@ -8,6 +8,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 A web app where users guess if the BTC/USD price will go up or down after one minute.
 
+<img width="1552" alt="Screenshot 2024-07-31 at 18 38 02" src="https://github.com/user-attachments/assets/4b49bc0e-1304-4b80-9b8a-48b5158dd6c2">
+
 ## Features
 
 This repository includes the following features:

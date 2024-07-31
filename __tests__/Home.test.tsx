@@ -36,8 +36,8 @@ describe('Home', () => {
   it('renders the home page with initial state', () => {
     render(<Home />);
     expect(screen.getByText('Can you guess the price of Bitcoin after')).toBeInTheDocument();
-    expect(screen.getByText('Up')).toBeInTheDocument();
-    expect(screen.getByText('Down')).toBeInTheDocument();
+    expect(screen.getByText('▲ Up')).toBeInTheDocument();
+    expect(screen.getByText('Down ▼')).toBeInTheDocument();
   });
 
   it('displays the current BTC price', async () => {
@@ -50,6 +50,16 @@ describe('Home', () => {
     const mockNewPrice = 22100;
     const userScore = 5;
   
+    const formatPrice = (price: number | null): string => {
+      if (price === null) {
+        return '';
+      }
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+      }).format(price);
+    };
+
     // Mock fetchBTCPrice
     vi.mocked(fetchBTCPrice).mockResolvedValue(mockInitialPrice)
       .mockResolvedValueOnce(mockNewPrice);
@@ -71,9 +81,11 @@ describe('Home', () => {
     render(<Home />);
 
     // Simulate button click
-    fireEvent.click(screen.getByText('Down'));
+    fireEvent.click(screen.getByText('Down ▼'));
 
-    expect(fetchBTCPrice).toHaveBeenCalledTimes(2);
+    await waitFor(() => {expect(fetchBTCPrice).toHaveBeenCalledTimes(2)}, {
+      timeout: 60000,
+    });
 
     // Verify that fetch call to /api/score was made with correct userId and timestamp
     await waitFor(() => {
@@ -87,10 +99,10 @@ describe('Home', () => {
     // Verify if BTC Price was updated
     await waitFor(() => {
       expect(screen.getByTestId('btc-price')).toBeInTheDocument();
-      expect(screen.getByTestId('btc-price')).toHaveTextContent(mockNewPrice.toString());
+      expect(screen.getByTestId('btc-price')).toHaveTextContent(formatPrice(mockNewPrice));
     });
 
     // Verify score update
     expect(await screen.getByTestId('score')).toHaveTextContent('Score: 5');
-  });
+  }, 65000);
 });

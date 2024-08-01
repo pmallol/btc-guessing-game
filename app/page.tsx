@@ -1,7 +1,6 @@
 "use client"
 import { useState, useEffect } from 'react';
 import { useCookies } from 'next-client-cookies';
-import { fetchBTCPrice } from '../services/BTCPrice';
 
 import Score from "@/components/Score";
 import LoadingBar from '@/components/LoadingBar';
@@ -24,7 +23,8 @@ export default function Home() {
   useEffect(() => {
     const fetchInitialPrice = async () => {
       try {
-        const price = await fetchBTCPrice();
+        const response = await fetch(`/api/btc-price`);
+        const price = await response.json();
         setBtcPrice(price);
       } catch (error) {
         setError('Error occurred while fetching initial BTC price');
@@ -39,11 +39,12 @@ export default function Home() {
     setLoading(true);
     try {
       await new Promise(resolve => setTimeout(resolve, timeout));
-      const newPrice = await fetchBTCPrice();
+      const fetchBtcResponse = await fetch(`/api/btc-price`);
+      const newPrice = await fetchBtcResponse.json();
 
       const result = guess === 'up' ? (btcPrice !== null && newPrice > btcPrice) : (btcPrice !== null && newPrice < btcPrice);
 
-      const response = await fetch(`/api/score?userId=${userId}`, {
+      const setScoreResponse = await fetch(`/api/score?userId=${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,11 +55,11 @@ export default function Home() {
         }),
       });
 
-      if (!response.ok) {
+      if (!setScoreResponse.ok) {
         throw new Error('Failed to update score');
       }
 
-      const data = await response.json();
+      const data = await setScoreResponse.json();
       setUserScore(data.score);
       setUserGuess(result);
       setBtcPricePrev(btcPrice);

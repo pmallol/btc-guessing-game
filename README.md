@@ -42,15 +42,21 @@ This repository includes the following features:
 ```bash
 npm install
 ```
-3. Configure the `.env.local` file with the following credentials:
+
+3. Create an account in [CoinMarketCap](https://pro.coinmarketcap.com/signup/?plan=0) to get an API key.
+
+4. Create your AWS acount and a DynamoDB Table named 'BTC-guessing-game-scores'. Get your credentials by creating a new [IAM role](https://docs.aws.amazon.com/keyspaces/latest/devguide/access.credentials.html).
+
+5. Configure the `.env.local` file with the following credentials:
   ```
 N_AWS_ACCESS_KEY_ID=
 N_AWS_SECRET_ACCESS_KEY=
 N_AWS_REGION=
+N_COIN_MARKET_API=
   ```
 *Note that these are custom environment variables to work with the Netlify Previews
 
-4. Run the development server:
+6. Run the development server:
 
 ```bash
 npm run dev

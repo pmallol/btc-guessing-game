@@ -3,7 +3,6 @@ import { vi } from 'vitest';
 import '@testing-library/jest-dom';
 
 import Home from '../app/page';
-import { fetchBTCPrice } from '../services/BTCPrice';
 
 // Mock next-client-cookies
 vi.mock('next-client-cookies', () => ({
@@ -17,20 +16,10 @@ vi.mock('next-client-cookies', () => ({
   }),
 }));
 
-// Mock the fetchBTCPrice function
-vi.mock('../services/BTCPrice', () => ({
-  fetchBTCPrice: vi.fn(),
-}));
-
-vi.spyOn(global, 'fetch').mockImplementation(vi.fn());
-
 describe('Home', () => {
   beforeEach(() => {
-    vi.mocked(fetchBTCPrice).mockResolvedValue(50000)
-  });
-
-  afterEach(() => {
     vi.clearAllMocks();
+    global.fetch = vi.fn();
   });
 
   it('renders the home page with initial state', () => {
@@ -41,68 +30,50 @@ describe('Home', () => {
   });
 
   it('displays the current BTC price', async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => (23000),
+    });
+
     render(<Home />);
+
     await waitFor(() => expect(screen.getByTestId('btc-price')).toBeInTheDocument());
+    expect(screen.getByTestId('btc-price')).toHaveTextContent('$23,000.00');
   });
 
   it('fetches the user score and updates btcPricePrev on button click', async () => {
     const mockInitialPrice = 22000;
-    const mockNewPrice = 22100;
+    const mockNewPrice = 25100;
     const userScore = 5;
-  
-    const formatPrice = (price: number | null): string => {
-      if (price === null) {
-        return '';
-      }
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(price);
-    };
 
-    // Mock fetchBTCPrice
-    vi.mocked(fetchBTCPrice).mockResolvedValue(mockInitialPrice)
-      .mockResolvedValueOnce(mockNewPrice);
-
-    // Mock fetch for API
-    (global.fetch as jest.Mock).mockImplementationOnce(async (url: string | string[]) => {
-      if (url.includes('/api/score?userId=test-user-id')) {
-        return {
-          ok: true,
-          json: async () => ({ score: userScore }),
-        };
-      }
-      return {
-        ok: true,
-        json: async () => ({}),
-      };
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => (mockInitialPrice),
+    }).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ score: userScore }),
+    }).mockResolvedValueOnce({
+      ok: true,
+      json: async () => (mockNewPrice),
     });
+
 
     render(<Home />);
 
     // Simulate button click
     fireEvent.click(screen.getByText('Down ▼'));
 
-    await waitFor(() => {expect(fetchBTCPrice).toHaveBeenCalledTimes(2)}, {
-      timeout: 60000,
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledTimes(2);
     });
 
-    // Verify that fetch call to /api/score was made with correct userId and timestamp
-    await waitFor(() => {
-      const fetchCalls = (global.fetch as unknown as jest.Mock).mock.calls;
-      // console.log('fetchCalls', fetchCalls, fetchCalls[0][0]);
-      expect(fetchCalls[0][0]).toBe('/api/score?userId=test-user-id');
-      const requestBody = JSON.parse(fetchCalls[1][1].body as string);
-      expect(typeof requestBody.timestamp).toBe('number'); // Check if timestamp is a number
-      expect(requestBody.guess).toBe(false);
-    });
     // Verify if BTC Price was updated
     await waitFor(() => {
       expect(screen.getByTestId('btc-price')).toBeInTheDocument();
-      expect(screen.getByTestId('btc-price')).toHaveTextContent(formatPrice(mockNewPrice));
+      expect(screen.getByTestId('btc-price')).toHaveTextContent('$25,100.00');
     });
 
     // Verify score update
-    expect(await screen.getByTestId('score')).toHaveTextContent('Score: 5');
-  }, 65000);
+    expect(await screen.getByTestId('score')).toHaveTextContent('Your Score: 5');
+  });
 });

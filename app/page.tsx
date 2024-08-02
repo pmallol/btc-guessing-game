@@ -20,11 +20,23 @@ export default function Home() {
   const [btcPricePrev, setBtcPricePrev] = useState<number | null>(null);
   const [hideMessage, setHideMessage] = useState(false);
 
+  const fetchBtcPrice = async () => {
+    try {
+      const response = await fetch(`/api/btc-price`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch the BTC price');
+      }
+      const price = await response.json();
+      return price
+    } catch (error) {
+      setError('Error occurred while fetching BTC price');
+    }
+  };
+
   useEffect(() => {
     const fetchInitialPrice = async () => {
       try {
-        const response = await fetch(`/api/btc-price`);
-        const price = await response.json();
+        const price = await fetchBtcPrice();
         setBtcPrice(price);
       } catch (error) {
         setError('Error occurred while fetching initial BTC price');
@@ -39,8 +51,8 @@ export default function Home() {
     setLoading(true);
     try {
       await new Promise(resolve => setTimeout(resolve, timeout));
-      const fetchBtcResponse = await fetch(`/api/btc-price`);
-      const newPrice = await fetchBtcResponse.json();
+
+      const newPrice = await fetchBtcPrice();
 
       const result = guess === 'up' ? (btcPrice !== null && newPrice > btcPrice) : (btcPrice !== null && newPrice < btcPrice);
 

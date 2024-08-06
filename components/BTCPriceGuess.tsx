@@ -21,7 +21,7 @@ const BTCPriceGuess: React.FC<BTCPriceGuessProps> = ({ btcPrice, btcPricePrev, e
   };
 
   return (
-    <div className='flex flex-col self-center text-lg container border border-orange-300 w-full h-64 p-12 py-20 drop-shadow-md rounded-lg'>
+    <div className='flex flex-col self-center text-lg container w-full h-64 p-6 py-12 drop-shadow-md rounded-lg'>
       <div className='flex justify-between gap-8'>
         {!btcPrice && <div data-testid="btc-price-loading">Loading BTC Price...</div>}
         {btcPrice &&

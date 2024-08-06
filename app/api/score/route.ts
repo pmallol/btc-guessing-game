@@ -52,10 +52,10 @@ const getUserScore = async (userId: string, res: NextApiResponse<Data>) => {
 
   try {
     const result = await dynamoDB.send(new GetCommand(params));
-    const score = result.Item?.score;
     if (!result.Item?.userId) {
       setUserScore(userId, Date.now(), 0, res);
     }
+    const score = result.Item?.score || 0;
     return Response.json({ score }, {status:200});
   } catch (error) {
     return Response.json({ message: `Error fetching score: ${error}` }, { status: 500 });

@@ -3,6 +3,7 @@ import { act } from 'react';
 import { vi } from 'vitest';
 import '@testing-library/jest-dom';
 
+import {useCookies} from 'next-client-cookies';
 import Home from '../app/page';
 
 // Mock next-client-cookies
@@ -28,6 +29,15 @@ describe('Home', () => {
       ok: true,
       json: async () => ({ score: 0 }),
     });
+  });
+
+  it('checks if the cookie "test-user-id" exists', async () => {
+    await act(() => {
+      render(<Home />)
+    });
+  
+    const cookies = useCookies();
+    expect(cookies.get('userId')).toBe('test-user-id');
   });
 
   it('renders the home page with initial state', async () => {

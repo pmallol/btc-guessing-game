@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { act } from 'react';
 import { vi } from 'vitest';
 import '@testing-library/jest-dom';
 
@@ -19,24 +20,32 @@ vi.mock('next-client-cookies', () => ({
 describe('Home', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    global.fetch = vi.fn();
+
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => (23000),
+    }).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ score: 0 }),
+    });
   });
 
-  it('renders the home page with initial state', () => {
-    render(<Home />);
+  it('renders the home page with initial state', async () => {
+    await act(() => {
+      render(<Home />)
+    });
+
     expect(screen.getByText('Can you guess the price of Bitcoin after')).toBeInTheDocument();
+    expect(screen.getByTestId('score')).toBeInTheDocument();
+    expect(screen.getByTestId('btc-price')).toBeInTheDocument();
     expect(screen.getByText('▲ Up')).toBeInTheDocument();
     expect(screen.getByText('Down ▼')).toBeInTheDocument();
   });
 
   it('displays the current BTC price', async () => {
-    global.fetch = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => (23000),
-    });
-
     render(<Home />);
 
+    await waitFor(() => expect(screen.getByTestId('score')).toHaveTextContent('Your Score: 0'));
     await waitFor(() => expect(screen.getByTestId('btc-price')).toBeInTheDocument());
     expect(screen.getByTestId('btc-price')).toHaveTextContent('$23,000.00');
   });

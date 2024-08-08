@@ -23,7 +23,7 @@ describe('Home', () => {
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => (23000),
+      json: async () => ({price: 23000}),
     }).mockResolvedValueOnce({
       ok: true,
       json: async () => ({ score: 0 }),
@@ -57,13 +57,13 @@ describe('Home', () => {
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => (mockInitialPrice),
+      json: async () => ({price: mockInitialPrice}),
     }).mockResolvedValueOnce({
       ok: true,
       json: async () => ({ score: userScore }),
     }).mockResolvedValueOnce({
       ok: true,
-      json: async () => (mockNewPrice),
+      json: async () => ({price: mockNewPrice}),
     });
 
 

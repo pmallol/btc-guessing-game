@@ -26,7 +26,7 @@ export default function Home() {
       if (!response.ok) {
         throw new Error('Failed to fetch the BTC price');
       }
-      const price = await response.json();
+      const { price } = await response.json();
       return price
     } catch (error) {
       setError('Error occurred while fetching BTC price');

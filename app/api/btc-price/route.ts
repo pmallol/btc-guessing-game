@@ -18,7 +18,7 @@ export async function GET(request: NextRequest, res: NextApiResponse<Data>) {
   });
   const data = await response.json();
 
-  return Response.json(data.data.BTC.quote.USD.price, {status: 200});
+  return Response.json({price: data.data.BTC.quote.USD.price}, {status: 200});
  } catch (error) {
   return Response.json({ message: `Error fetching BTC price: ${error}` }, {status: 500});
  }
